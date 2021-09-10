@@ -89,6 +89,8 @@ dependencies = [
  "serde",
  "sqlx",
  "tokio",
+ "tower",
+ "tower-http",
 ]
 
 [[package]]
@@ -1346,6 +1348,7 @@ dependencies = [
  "pin-project",
  "tower-layer",
  "tower-service",
+ "tracing",
 ]
 
 [[package]]
