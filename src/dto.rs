@@ -10,3 +10,13 @@ pub struct CreateUserReq {
 pub struct CreateUserResp {
     pub ok: bool,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct DeleteUserReq {
+    pub id: u64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct DeleteUserResp {
+    pub ok: bool,
+}
