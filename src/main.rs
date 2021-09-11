@@ -1,6 +1,6 @@
 mod handlers;
 mod dto;
-mod dao;
+mod models;
 
 use std::{error::Error,time::Duration};
 use axum::{handler::{get, post}, Router};
@@ -22,6 +22,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
         .route("/", get(handlers::hello))
         .route("/user/create", post(handlers::create_user))
         .route("/user/delete", post(handlers::delete_user))
+        .route("/user/get_one", post(handlers::get_users))
         .layer(
             ServiceBuilder::new()
                 .timeout(Duration::from_secs(10))

@@ -8,7 +8,7 @@ use tower::BoxError;
 use std::convert::Infallible;
 use sqlx::{Pool, MySql};
 use crate::dto;
-use crate::dao;
+use crate::models;
 
 pub async fn hello() -> Html<&'static str> {
     println!("hello");
@@ -20,7 +20,7 @@ pub async fn create_user(
     Extension(pool): Extension<Pool<MySql>>,
 ) -> impl IntoResponse {
     println!("{:#?}", req);
-    match dao::create_user(&pool, &req.username, &req.password).await {
+    match models::create_user(&pool, &req.username, &req.password).await {
         Ok(_) => {
             (StatusCode::OK, Json(dto::CreateUserResp {
                 ok: true
@@ -39,7 +39,7 @@ pub async fn delete_user(
     Extension(pool): Extension<Pool<MySql>>,
 ) -> impl IntoResponse {
     println!("{:#?}", req);
-    match dao::delete_user(&pool, req.id).await {
+    match models::delete_user(&pool, req.id).await {
         Ok(_) => {
             (StatusCode::OK, Json(dto::DeleteUserResp {
                 ok: true
@@ -48,6 +48,26 @@ pub async fn delete_user(
         Err(_) => {
             (StatusCode::INTERNAL_SERVER_ERROR, Json(dto::DeleteUserResp {
                 ok: false
+            }))
+        }
+    }
+}
+
+
+pub async fn get_users(
+    Json(req): Json<dto::GetUsersReq>,
+    Extension(pool): Extension<Pool<MySql>>,
+) -> impl IntoResponse {
+    println!("{:#?}", req);
+    match models::get_users(&pool, req.ids).await {
+        Ok(users) => {
+            (StatusCode::OK, Json(dto::GetUsersResp {
+                users
+            }))
+        }
+        Err(_) => {
+            (StatusCode::INTERNAL_SERVER_ERROR, Json(dto::GetUsersResp {
+                users: vec![]
             }))
         }
     }
